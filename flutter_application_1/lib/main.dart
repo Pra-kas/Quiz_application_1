@@ -1,74 +1,67 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/component/view/sign_up.dart';
 
-
-void main(){
+void main() {
   runApp(const HomePage());
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-        home: Padding(
-          padding: const EdgeInsets.all(33.0),
-          child: Scaffold(
-            body: SizedBox(
-              width: double.maxFinite,
-              height: double.maxFinite,
-              child: Stack(
-                children: <Widget>[
-                  Positioned(
-                    right: 25,
-                    left: 25,
-                    top: 30,
-                    child: Container(
-                      width: 305,
-                      height: 300,
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage("/home/prakash/Quiz_application_1/flutter_application_1/lib/component/util/logo.jpeg")
-                        )
+      home: Scaffold(
+        body: SizedBox(
+          width: width,
+          height: height,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Center(
+                  child: Container(
+                    height: height/3,
+                    width: width/2,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage("/home/prakash/Quiz_application_1/flutter_application_1/lib/component/util/logo.jpeg"),
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
-                  Positioned(
-                    top: 450,
-                    left: 20,
-                    right: 20,
-                    child: Container(
-                      height: 45,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                        borderRadius: BorderRadius.circular(10),
-                         color: const Color.fromARGB(255, 101, 33, 113)
-                      ),
-                      child: Builder(
-                        builder: (context) {
-                          return TextButton(
-                            child: const Text(
-                                "Get started",
-                                style: TextStyle(
-                                color: Colors.white
-                              ),
-                            ),
-                            onPressed: () {
+                ),
+                Container(
+                  height: width/8,
+                  width: height/2,
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 94, 32, 105),
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.circular(15)
+                  ),
+                  child: Builder(
+                    builder: (context) {
+                      return TextButton(
+                          onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const Signup()),
-                              );
-                            },
-                          );
-                        }
-                      ),
+                                MaterialPageRoute(builder: (context) => const Signup()), 
+                            );
+                          },
+                          child: const Text(
+                            "Get Started",
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white
+                            ),
+                          ),
+                      );
+                    }
                   ),
                 )
               ],

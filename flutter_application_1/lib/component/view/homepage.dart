@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/component/view/homeScreen.dart';
+import 'package:flutter_application_1/component/view/user_profile.dart';
 
 void main() {
   runApp(const HomePage());
@@ -58,7 +59,7 @@ class _HomePageState extends State<HomePage> {
       case 1:
         return LeaderboardScreen();
       case 2:
-        return ProfileScreen();
+        return const ProfileScreen();
       default:
         return Container(); // Handle the default case or return an empty container
     }
@@ -71,15 +72,6 @@ class LeaderboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Center(
       child: Text('Leaderboard Screen'),
-    );
-  }
-}
-
-class ProfileScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Profile Screen'),
     );
   }
 }
