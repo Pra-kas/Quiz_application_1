@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
+import 'dart:core';
 import 'package:flutter_application_1/component/view/homeScreen.dart';
+import 'package:flutter_application_1/service/quizCreationApiCall.dart';
+import 'package:flutter/material.dart';
 
 void main() {
   runApp(const CreateQuiz());
@@ -14,23 +16,30 @@ class CreateQuiz extends StatefulWidget {
 
 class _CreateQuizState extends State<CreateQuiz> {
 
-   static List<Map<String, String>> obj = [];
+  static List<Map<String,String>> obj = [];
+  static const List<String> collectionName = <String>['History', 'Maths', 'Biology', 'Programming'];
+  TextEditingController A = TextEditingController();
+  TextEditingController B = TextEditingController();
+  TextEditingController C = TextEditingController();
+  TextEditingController answer = TextEditingController();
+  TextEditingController D = TextEditingController();
+  TextEditingController title = TextEditingController();
+  TextEditingController question = TextEditingController();
+
+    // ignore: non_constant_identifier_names
+
 
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController A = TextEditingController();
-    TextEditingController B = TextEditingController();
-    TextEditingController C = TextEditingController();
-    TextEditingController answer = TextEditingController();
-    TextEditingController D = TextEditingController();
-    TextEditingController title = TextEditingController();
-    TextEditingController question = TextEditingController();
+    
 
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     bool x = width > height;
     
+
+
     // ignore: non_constant_identifier_names
     SizedBox question_quiz(double height, double width,TextEditingController question) {
     return SizedBox(
@@ -142,15 +151,7 @@ class _CreateQuizState extends State<CreateQuiz> {
 
                     Builder(
                       builder: (context) {
-                        return ElevatedButton(
-                          onPressed: () {
-                              Alert_option(context, title);
-                            print(obj);
-                          },
-                          child: const Text(
-                            "Save",
-                          )
-                        );
+                        return save_button(context, title, A, B, C, D,answer,question);
                       }
                     ),
 
@@ -166,6 +167,28 @@ class _CreateQuizState extends State<CreateQuiz> {
           ),
         ),
       ),
+    );
+  }
+
+  ElevatedButton save_button(BuildContext context, TextEditingController title, TextEditingController A, TextEditingController B, TextEditingController C, TextEditingController D, TextEditingController answer, TextEditingController question) {
+    return ElevatedButton(
+    onPressed: (){
+        obj.add(
+            {
+            "question" : question.text.trim(),
+            "optionA" : A.text.trim(),
+            "optionB" : B.text.trim(),
+            "optionC" : C.text.trim(),
+            "optionD" : D.text.trim(),
+            "correctAnswer" : answer.text.trim(),
+          }
+        );
+        Alert_option(context, title);
+          print(obj);
+        },
+      child: const Text(
+        "Save",
+      )
     );
   }
 
@@ -188,19 +211,29 @@ class _CreateQuizState extends State<CreateQuiz> {
 
   // ignore: non_constant_identifier_names
   Future<dynamic> Alert_option(BuildContext context, TextEditingController title) {
+    String dropDownValue = collectionName.first;
     return showDialog(
        context: context,
        builder: (ctx) => AlertDialog(
          title: const Text("Quiz Title"),
-         content: TextField(
-           controller: title,
-           decoration: const InputDecoration(
-             hintText : "quiz title..",
-           ),
-         ),
+         content: DropdownButton<String>(
+              value: dropDownValue,
+              onChanged: (String? value) {
+                dropDownValue = value!;
+                setState(() {
+                  title.text = value;
+              });
+            },
+            items: collectionName.map<DropdownMenuItem<String>>((String value){
+               return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(), 
+          ),
 
          actions: <Widget>[
-           okey_button(context, title),
+           okey_button(context, title, question,A,B,C,D,answer),
 
            Builder(
              builder: (context) {
@@ -213,11 +246,17 @@ class _CreateQuizState extends State<CreateQuiz> {
   }
 
   // ignore: non_constant_identifier_names
-  TextButton okey_button(BuildContext context, TextEditingController title) {
+  TextButton okey_button(BuildContext context,TextEditingController title,TextEditingController question,TextEditingController A,TextEditingController B,TextEditingController C, TextEditingController D, TextEditingController answer) {
     return TextButton(
-           onPressed: () {
-             Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
-             print(title.text.trim());
+           onPressed: () async{
+            if(await quiz_validation(question,A,B,C,D,answer,title,obj)){
+              // ignore: use_build_context_synchronously
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+              print(title.text.trim());
+            }
+            else{
+              print("Prakash");
+            }
            },
            child: Container(
              color: Colors.green,
@@ -245,21 +284,25 @@ class _CreateQuizState extends State<CreateQuiz> {
   ElevatedButton next_button(TextEditingController question, TextEditingController A, TextEditingController B, TextEditingController C, TextEditingController D, TextEditingController answer) {
     return ElevatedButton(
       onPressed: () {
-      setState(() {
-          // print("${question.text} ${A.text} ${B.text} ${C.text} ${D.text} ");
-          // print("Prakash");
-          obj.add(
-            {
-             "question" : question.text.trim(),
-             "A" : A.text.trim(),
-             "B" : B.text.trim(),
-             "C" : C.text.trim(),
-             "D" : D.text.trim(),
-             "answer" : answer.text.trim(),
-           }
-         );
-        //  print(obj);
-       });
+            // print("${question.text} ${A.text} ${B.text} ${C.text} ${D.text} ");
+            // print("Prakash");
+            obj.add(
+              {
+              "question" : question.text.trim(),
+              "optionA" : A.text.trim(),
+              "optionB" : B.text.trim(),
+              "optionC" : C.text.trim(),
+              "optionD" : D.text.trim(),
+              "correctAnswer" : answer.text.trim(),
+            }
+          );
+         print(obj);
+         A.clear();
+         B.clear();
+         C.clear();
+         D.clear();
+         answer.clear();
+         question.clear();
      },
      child: const Icon(
        Icons.arrow_right_rounded,
@@ -267,6 +310,7 @@ class _CreateQuizState extends State<CreateQuiz> {
    );
   }
 
+  // ignore: non_constant_identifier_names
   Container Question(TextEditingController answer) {
     return Container(
     child: Card(
@@ -286,6 +330,7 @@ class _CreateQuizState extends State<CreateQuiz> {
   );
 }
 
+  // ignore: non_constant_identifier_names
   Container OptionD(TextEditingController D) {
     return Container(
     child: Card(
@@ -305,6 +350,7 @@ class _CreateQuizState extends State<CreateQuiz> {
   );
 }
 
+  // ignore: non_constant_identifier_names
   Container OptionC(TextEditingController C) {
     return Container(                       
     child: Card(
@@ -324,6 +370,7 @@ class _CreateQuizState extends State<CreateQuiz> {
   );
 }
 
+  // ignore: non_constant_identifier_names
   Container OptionB(TextEditingController B) {
     return Container(              
     child: Card(
@@ -343,6 +390,7 @@ class _CreateQuizState extends State<CreateQuiz> {
   );
 }
 
+  // ignore: non_constant_identifier_names
   Container OptionA(TextEditingController A) {
     return Container(
       child: Card(

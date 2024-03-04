@@ -24,49 +24,61 @@ class HomePage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
+                
                 Center(
-                  child: Container(
-                    height: height/3,
-                    width: width/2,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage("/home/prakash/Quiz_application_1/flutter_application_1/lib/component/util/logo.jpeg"),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
+                  child: quiz_logo(height, width),
                 ),
-                Container(
-                  height: width/8,
-                  width: height/2,
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 94, 32, 105),
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.circular(15)
-                  ),
-                  child: Builder(
-                    builder: (context) {
-                      return TextButton(
-                          onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const Signup()), 
-                            );
-                          },
-                          child: const Text(
-                            "Get Started",
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white
-                            ),
-                          ),
-                      );
-                    }
-                  ),
-                )
+
+                get_started_button(width, height)
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  // ignore: non_constant_identifier_names
+  Container get_started_button(double width, double height) {
+    return Container(
+      height: width/8,
+      width: height/2,
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(255, 94, 32, 105),
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(15)
+      ),
+      child: Builder(
+        builder: (context) {
+          return TextButton(
+            onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Signup()), 
+              );
+            },
+            child: const Text(
+              "Get Started",
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.white
+              ),
+            ),
+          );
+        }
+      ),
+    );
+  }
+
+  // ignore: non_constant_identifier_names
+  Container quiz_logo(double height, double width) {
+    return Container(
+      height: height/3,
+      width: width/2,
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("/home/prakash/Quiz_application_1/flutter_application_1/lib/component/util/logo.jpeg"),
+          fit: BoxFit.cover,
         ),
       ),
     );

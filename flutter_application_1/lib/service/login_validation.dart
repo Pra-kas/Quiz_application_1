@@ -16,6 +16,8 @@ Future<bool> validateUser(TextEditingController email,TextEditingController pass
 
     var decodeResponse = jsonDecode(response.body);
     print("hello ${decodeResponse["message"].toString()}");
+    print(decodeResponse["status"]);
+
     if(decodeResponse['status']){
        return true;
     }

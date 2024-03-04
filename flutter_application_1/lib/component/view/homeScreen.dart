@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_unnecessary_containers
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/component/view/create_quiz.dart';
+import 'package:flutter_application_1/component/view/quiz_topics.dart';
 
 void main() {
   runApp(const HomeScreen());
@@ -114,9 +116,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 Padding(
                   padding: EdgeInsets.only(top: height / 25),
                   child: Center(
-                    child: TextButton(
-                      onPressed: () {},
-                      child: const Text("Create"),
+                    child: Builder(
+                      builder: (context) {
+                        return TextButton(
+                          onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateQuiz()));
+                          },
+                          child: const Text("Create"),
+                        );
+                      }
                     ),
                   ),
                 ),
