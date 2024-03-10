@@ -1,7 +1,8 @@
 // ignore_for_file: avoid_unnecessary_containers
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/component/view/create_quiz.dart';
-import 'package:flutter_application_1/component/view/quiz_topics.dart';
+import 'package:flutter_application_1/component/view/quiz.dart';
+import 'package:flutter_application_1/service/quiz_topics_api_call.dart';
 
 void main() {
   runApp(const HomeScreen());
@@ -15,7 +16,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool showAllCategories = false;
   bool recentquizes = true;
 
   @override
@@ -58,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Padding(
                   padding: EdgeInsets.only(top: height / 23, right: width/2),
                   child: const Text(
-                    "Hot Categories ",
+                    "All Categories ",
                     style: TextStyle(
                       fontSize: 20,
                       color: Color.fromARGB(255, 51, 10, 121),
@@ -68,25 +68,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.only(top: height / 25, left: width/2),
-                  child: SizedBox(
-                    width: 60,
-                    height: 30,
-                    child: TextButton(
-                      onPressed: () {
-                        setState(() {
-                          showAllCategories = !showAllCategories;
-                        });
-                      },
-                      child: const Text("See All"),
-                    ),
-                  ),
-                ),
-
-                Padding(
                   padding: EdgeInsets.only(top : height/70,left: 13,right: 13),
                   child: Container(
-                    child: Grid(showAll: showAllCategories)),
+                    child: const Grid(showAll: true)),
                 ),
 
                 Padding(
@@ -157,29 +141,36 @@ class _GridState extends State<Grid> {
       crossAxisCount: 2,
       shrinkWrap: true,
       childAspectRatio: 1.5,
-      children: widget.showAll
-          ? [
-              category("History"),
-              category("Maths"),
+      children:[
+              category("General knowledge"),
+              category("maths"),
               category("Science"),
-              category("Computer"),
-            ]
-          : [
-              category("History"),
-              category("Maths"),
+              category("Programming"),
+              category("Sports"),
+              category("wildlife"),
             ],
     );
   }
 
-  Container category(String content) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        shape: BoxShape.rectangle,
-        borderRadius: BorderRadius.circular(12),
-        color: const Color.fromARGB(255, 218, 215, 215),
+  ElevatedButton category(String content) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+           borderRadius: BorderRadius.circular(30.0)
+        )
       ),
-      child: Center(child: Text(content)),
+      onPressed: () async {
+        dynamic question = await getQuestions(content);
+        if(question['status']){
+          question = question['message'];
+          // ignore: use_build_context_synchronously
+          Navigator.push(context, MaterialPageRoute(builder: ((context) => QuizContest(quizQuestions: question,))));
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        child: Center(child: Text(content)),
+      ),
     );
   }
 }

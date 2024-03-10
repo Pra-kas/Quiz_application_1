@@ -9,7 +9,7 @@ Future<bool> validateUser(TextEditingController email,TextEditingController pass
       "password":password.text.trim(),
     };
 
-    var response = await http.post(Uri.parse("http://172.17.17.217:3000/login"),
+    var response = await http.post(Uri.parse("http://192.168.42.55:3000/login"),
     headers:{"content-Type":"application/json"},
     body:jsonEncode(requestBody)
     );
