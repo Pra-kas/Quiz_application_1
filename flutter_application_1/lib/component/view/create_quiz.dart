@@ -3,12 +3,10 @@ import 'package:flutter_application_1/component/view/homeScreen.dart';
 import 'package:flutter_application_1/service/quizCreationApiCall.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const CreateQuiz());
-}
 
 class CreateQuiz extends StatefulWidget {
-  const CreateQuiz({super.key});
+  final dynamic title;
+  const CreateQuiz({super.key, required this.title});
 
   @override
   State<CreateQuiz> createState() => _CreateQuizState();
@@ -16,14 +14,13 @@ class CreateQuiz extends StatefulWidget {
 
 class _CreateQuizState extends State<CreateQuiz> {
 
-  static List<Map<String,String>> obj = [];
-  static const List<String> collectionName = <String>['History', 'Maths', 'Biology', 'Programming'];
+  List<Map<String,String>> obj = [];
+  bool isPressedSave = false;
   TextEditingController A = TextEditingController();
   TextEditingController B = TextEditingController();
   TextEditingController C = TextEditingController();
   TextEditingController answer = TextEditingController();
   TextEditingController D = TextEditingController();
-  TextEditingController title = TextEditingController();
   TextEditingController question = TextEditingController();
 
     // ignore: non_constant_identifier_names
@@ -151,7 +148,7 @@ class _CreateQuizState extends State<CreateQuiz> {
 
                     Builder(
                       builder: (context) {
-                        return save_button(context, title, A, B, C, D,answer,question);
+                        return save_button(context, A, B, C, D,answer,question);
                       }
                     ),
 
@@ -170,9 +167,13 @@ class _CreateQuizState extends State<CreateQuiz> {
     );
   }
 
-  ElevatedButton save_button(BuildContext context, TextEditingController title, TextEditingController A, TextEditingController B, TextEditingController C, TextEditingController D, TextEditingController answer, TextEditingController question) {
+  ElevatedButton save_button(BuildContext context, TextEditingController A, TextEditingController B, TextEditingController C, TextEditingController D, TextEditingController answer, TextEditingController question) {
     return ElevatedButton(
     onPressed: (){
+      setState(() {
+        print("Entered");
+        isPressedSave = true;
+      });
         obj.add(
             {
             "question" : question.text.trim(),
@@ -183,7 +184,7 @@ class _CreateQuizState extends State<CreateQuiz> {
             "correctAnswer" : answer.text.trim(),
           }
         );
-        Alert_option(context, title);
+        Alert_option(context);
           print(obj);
         },
       child: const Text(
@@ -210,34 +211,21 @@ class _CreateQuizState extends State<CreateQuiz> {
   }
 
   // ignore: non_constant_identifier_names
-  Future<dynamic> Alert_option(BuildContext context, TextEditingController title) {
-    String dropDownValue = collectionName.first;
+  Future<dynamic> Alert_option(BuildContext context) {
     return showDialog(
        context: context,
-       builder: (ctx) => AlertDialog(
+       builder: (context) => AlertDialog(
          title: const Text("Quiz Title"),
-         content: DropdownButton<String>(
-              value: dropDownValue,
-              onChanged: (String? value) {
-                dropDownValue = value!;
-                setState(() {
-                  title.text = value;
-              });
-            },
-            items: collectionName.map<DropdownMenuItem<String>>((String value){
-               return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(), 
-          ),
+         content: const Text(
+          "Is it over ??"
+         ),
 
          actions: <Widget>[
-           okey_button(context, title, question,A,B,C,D,answer),
+           okey_button(context,question,A,B,C,D,answer),
 
            Builder(
              builder: (context) {
-               return Cancel_button(ctx);
+               return Cancel_button(context);
              }
            ),
          ],
@@ -246,13 +234,13 @@ class _CreateQuizState extends State<CreateQuiz> {
   }
 
   // ignore: non_constant_identifier_names
-  TextButton okey_button(BuildContext context,TextEditingController title,TextEditingController question,TextEditingController A,TextEditingController B,TextEditingController C, TextEditingController D, TextEditingController answer) {
+  TextButton okey_button(BuildContext context,TextEditingController question,TextEditingController A,TextEditingController B,TextEditingController C, TextEditingController D, TextEditingController answer) {
     return TextButton(
            onPressed: () async{
-            if(await quiz_validation(question,A,B,C,D,answer,title,obj)){
+            if(await quiz_validation(widget.title,question,A,B,C,D,answer,obj)){
               // ignore: use_build_context_synchronously
               Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
-              print(title.text.trim());
+              print(widget.title);
             }
             else{
               print("Prakash");
@@ -286,16 +274,19 @@ class _CreateQuizState extends State<CreateQuiz> {
       onPressed: () {
             // print("${question.text} ${A.text} ${B.text} ${C.text} ${D.text} ");
             // print("Prakash");
-            obj.add(
-              {
-              "question" : question.text.trim(),
-              "optionA" : A.text.trim(),
-              "optionB" : B.text.trim(),
-              "optionC" : C.text.trim(),
-              "optionD" : D.text.trim(),
-              "correctAnswer" : answer.text.trim(),
+            if(!isPressedSave) {
+              print('working');
+              obj.add(
+                  {
+                  "question" : question.text.trim(),
+                  "optionA" : A.text.trim(),
+                  "optionB" : B.text.trim(),
+                  "optionC" : C.text.trim(),
+                  "optionD" : D.text.trim(),
+                  "correctAnswer" : answer.text.trim(),
+                }
+              );
             }
-          );
          print(obj);
          A.clear();
          B.clear();

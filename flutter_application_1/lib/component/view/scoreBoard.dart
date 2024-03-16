@@ -50,7 +50,7 @@ class _ScoreState extends State<Score> {
                   height: height / 8,
                   width: height / 8,
                   child: CircularProgressIndicator(
-                    value: (widget.score / 20).toDouble(), // Access widget.score here
+                    value: (widget.score / 5).toDouble(), // Access widget.score here
                     color: Colors.blueAccent,
                   ),
                 ),
@@ -63,7 +63,7 @@ class _ScoreState extends State<Score> {
                   height: height / 10,
                   child: Center(
                     child: Text(
-                      "${widget.score} / 20", // Access widget.score here
+                      "${widget.score} / 5", // Access widget.score here
                       style: TextStyle(
                         fontWeight: FontWeight.w300,
                         fontSize: height / 20,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/component/view/scoreBoard.dart';
+import 'package:flutter_application_1/service/question_validation.dart';
 
 class QuizContest extends StatefulWidget {
   final List<dynamic> quizQuestions; // List of questions
@@ -11,60 +12,12 @@ class QuizContest extends StatefulWidget {
 }
 
 class _QuizContestState extends State<QuizContest> {
-  late int currentQuestionIndex;
-  late dynamic currentQuestion;
   String selectedOption = "";
   bool isOptionSelected = false;
   bool showCorrectAnswer = false;
+  int index = 0;
   int correctScore = 0; // Counter for correct answers
 
-  @override
-  void initState() {
-    super.initState();
-    currentQuestionIndex = 0;
-    loadCurrentQuestion();
-  }
-
-  // Function to load the current question
-  void loadCurrentQuestion() {
-    if (currentQuestionIndex < widget.quizQuestions.length) {
-      currentQuestion = widget.quizQuestions[currentQuestionIndex];
-    }
-  }
-
-  // Function to handle user's answer
-  void handleAnswer(String selectedValue) {
-    setState(() {
-      if (!isOptionSelected) {
-        selectedOption = selectedValue;
-        isOptionSelected = true;
-        showCorrectAnswer = true;
-
-        // Check if the selected answer is correct
-        if (selectedOption == currentQuestion['correctAnswer']) {
-          correctScore++;
-        }
-      }
-
-      if(currentQuestionIndex == 4){
-            print("Hi broo");
-            Navigator.push(context, MaterialPageRoute(builder: (context) => Score(score:correctScore)));
-        }
-    });
-  }
-
-  // Function to load the next question
-  void loadNextQuestion() {
-    setState(() {
-      isOptionSelected = false;
-      showCorrectAnswer = false;
-      selectedOption = "";
-      currentQuestionIndex++;
-
-      // Load the next question if available
-      loadCurrentQuestion();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,35 +36,41 @@ class _QuizContestState extends State<QuizContest> {
 
                 Padding(
                   padding: EdgeInsets.only(top: height / 10),
-                  child: questions(height, width, currentQuestion['question']),
+                  child: questions(height, width,widget.quizQuestions[index]["question"]),
                 ),
 
                 Padding(
                   padding: EdgeInsets.only(top: height / 20),
-                  child: OptionA(height, width, currentQuestion['optionA']),
+                  child: OptionA(height, width, widget.quizQuestions[index]['optionA']),
                 ),
 
                 Padding(
                   padding: EdgeInsets.only(top: height / 20),
-                  child: OptionB(height, width, currentQuestion['optionB']),
+                  child: OptionB(height, width, widget.quizQuestions[index]['optionB']),
                 ),
                 
                 Padding(
                   padding: EdgeInsets.only(top: height / 20),
-                  child: OptionC(height, width, currentQuestion['optionC']),
+                  child: OptionC(height, width, widget.quizQuestions[index]['optionC']),
                 ),
 
                 Padding(
                   padding: EdgeInsets.only(top: height / 20),
-                  child: OptionD(height, width, currentQuestion['optionD']),
+                  child: OptionD(height, width, widget.quizQuestions[index]['optionD']),
                 ),
 
                 Padding(
                   padding: EdgeInsets.only(top: height/20),
                   child: ElevatedButton(
                     onPressed: () {
-                      // Load the next question
-                      loadNextQuestion();
+                      setState(() {
+                        isOptionSelected = false;
+                        if(index == 4){
+                          print("Reached");
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => Score(score: correctScore)));
+                        }
+                        index++;
+                      });
                     },
                     child: const Text("Next Question"),
                   ),
@@ -140,52 +99,58 @@ class _QuizContestState extends State<QuizContest> {
     );
   }
 
-  Container optionContainer(
-      double height, double width, String value, String correctAnswer) {
-    bool isCorrect = correctAnswer == selectedOption;
-    bool isSelected = isOptionSelected && selectedOption == value;
 
-    return Container(
-      decoration: BoxDecoration(
-        shape: BoxShape.rectangle,
-        borderRadius: BorderRadius.circular(20),
-        color: isSelected
-            ? (isCorrect ? Colors.green : Colors.red)
-            : (showCorrectAnswer && correctAnswer == value)
-                ? Colors.green
-                : null,
+Container optionContainer(double height, double width, String value) {
+  int isCorrect = 0;
+
+  return Container(
+    height: height / 8,
+    width: width,
+    decoration: BoxDecoration(
+      shape: BoxShape.rectangle,
+      borderRadius: BorderRadius.circular(20),
+      color: isCorrect == 1 ? Colors.green : Colors.red,
+    ),
+    child: InkWell(
+      onTap: isOptionSelected ? null : () {
+        setState(() async {
+          selectedOption = value;
+          isOptionSelected = true; // Mark an option as selected
+          print("why brro");
+          try{isCorrect = await correct_answer(selectedOption,index);}
+          catch(error){
+            print(error);
+          }
+          print("why brro");
+          if(isCorrect == 1) correctScore++;
+          print(correctScore);
+        });
+        // Handle user's answer
+        // handleAnswer(value);
+      },
+      
+      child: Center(
+        child: Text(value),
       ),
-      height: height / 8,
-      width: width,
-      child: InkWell(
-        onTap: () {
-          // Handle user's answer
-          handleAnswer(value);
-        },
-        child: Center(
-          child: Text(value),
-        ),
-      ),
-    );
-  }
+    ),
+  );
+}
+
+
 
   Container OptionA(double height, double width, String value) {
-    return optionContainer(
-        height, width, value, currentQuestion['correctAnswer']);
+    return optionContainer(height, width, value);
   }
 
   Container OptionB(double height, double width, String value) {
-    return optionContainer(
-        height, width, value, currentQuestion['correctAnswer']);
+    return optionContainer(height, width, value);
   }
 
   Container OptionC(double height, double width, String value) {
-    return optionContainer(
-        height, width, value, currentQuestion['correctAnswer']);
+    return optionContainer(height, width, value);
   }
 
   Container OptionD(double height, double width, String value) {
-    return optionContainer(
-        height, width, value, currentQuestion['correctAnswer']);
+    return optionContainer(height, width, value);
   }
 }

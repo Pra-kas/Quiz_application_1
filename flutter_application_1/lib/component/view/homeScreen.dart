@@ -17,6 +17,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool recentquizes = true;
+  static const List<String> collectionName = <String>['History', 'Maths', 'Biology', 'Programming', 'General knowledge'];
+  static String title = '';
 
   @override
   Widget build(BuildContext context) {
@@ -85,10 +87,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
 
-                Padding(
-                  padding: EdgeInsets.only(top: height / 25),
-                  child: Center(child: recentQuizes(recentquizes)),
-                ),
+                // Padding(
+                //   padding: EdgeInsets.only(top: height / 25),
+                //   child: Center(child: recentQuizes(recentquizes)),
+                // ),
 
                 Padding(
                   padding: EdgeInsets.only(top: height / 25),
@@ -104,7 +106,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       builder: (context) {
                         return TextButton(
                           onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateQuiz()));
+                            AlertOption(context);
+                            // Navigator.push(context, MaterialPageRoute(builder: (context) => QuizTitleDialog()));
                           },
                           child: const Text("Create"),
                         );
@@ -119,6 +122,56 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+// ignore: non_constant_identifier_names
+Future<void> AlertOption(context) async {
+  String selectedTitle = collectionName.first;
+  return showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        content: const Text("Quiz title"),
+        actions: [
+          DropdownButton<String>(
+            value: selectedTitle,
+            onChanged: (String? newValue) {
+              setState(() {
+                selectedTitle = newValue!;
+                title = newValue;
+                print(title);
+              });
+            },
+            items: collectionName.map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => CreateQuiz(title: title)));
+                },
+                child: const Text("okey"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text("cancel"),
+              ),
+            ],
+          ),
+        ],
+      );
+    },
+  );
+}
+
+
 }
 
 class Grid extends StatefulWidget {
@@ -143,7 +196,7 @@ class _GridState extends State<Grid> {
       childAspectRatio: 1.5,
       children:[
               category("General knowledge"),
-              category("maths"),
+              category("Maths"),
               category("Science"),
               category("Programming"),
               category("Sports"),
@@ -153,6 +206,7 @@ class _GridState extends State<Grid> {
   }
 
   ElevatedButton category(String content) {
+    print(content);
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
@@ -161,7 +215,7 @@ class _GridState extends State<Grid> {
       ),
       onPressed: () async {
         dynamic question = await getQuestions(content);
-        if(question['status']){
+        if(question['status'] == true){
           question = question['message'];
           // ignore: use_build_context_synchronously
           Navigator.push(context, MaterialPageRoute(builder: ((context) => QuizContest(quizQuestions: question,))));
@@ -175,17 +229,17 @@ class _GridState extends State<Grid> {
   }
 }
 
-Widget recentQuizes(bool recentquizes) {
-  if (recentquizes) {
-    return Container(
-      width: 200,
-      height: 150,
-      color: Colors.greenAccent,
-      child: const Center(child: Text("History")),
-    );
-  } else {
-    return Container(
-      child: const Text("No past history"),
-    );
-  }
-}
+// Widget recentQuizes(bool recentquizes) {
+//   if (recentquizes) {
+//     return Container(
+//       width: 200,
+//       height: 150,
+//       color: Colors.greenAccent,
+//       child: const Center(child: Text("History")),
+//     );
+//   } else {
+//     return Container(
+//       child: const Text("No past history"),
+//     );
+//   }
+// }
