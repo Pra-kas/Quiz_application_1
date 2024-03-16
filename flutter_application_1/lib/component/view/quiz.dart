@@ -64,7 +64,8 @@ class _QuizContestState extends State<QuizContest> {
                   child: ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        isOptionSelected = false;
+                        isAnswer = true;
+                        isAnswerSubmitted = false;
                         if(index == 4){
                           print("Reached");
                           Navigator.push(context, MaterialPageRoute(builder: (context) => Score(score: correctScore)));
@@ -99,42 +100,62 @@ class _QuizContestState extends State<QuizContest> {
     );
   }
 
+int isCorrect = 0;
+bool isAnswerSubmitted = false;
+bool isAnswer = true;
 
 Container optionContainer(double height, double width, String value) {
-  int isCorrect = 0;
-
+  Color defaultColor = const Color.fromARGB(255, 238, 236, 236); // Set the default color
+  Color selectedColor = Colors.blue; // Set the color for the selected option
+  
   return Container(
     height: height / 8,
     width: width,
-    decoration: BoxDecoration(
-      shape: BoxShape.rectangle,
-      borderRadius: BorderRadius.circular(20),
-      color: isCorrect == 1 ? Colors.green : Colors.red,
-    ),
-    child: InkWell(
-      onTap: isOptionSelected ? null : () {
+    child: ElevatedButton(
+      onPressed: isAnswer ? (){
         setState(() async {
-          selectedOption = value;
-          isOptionSelected = true; // Mark an option as selected
-          print("why brro");
-          try{isCorrect = await correct_answer(selectedOption,index);}
-          catch(error){
-            print(error);
+          if (!isAnswerSubmitted) {
+            // Process the click action only if the answer has not been submitted yet
+            selectedOption = value;
+            isAnswerSubmitted = true; // Mark the answer as submitted
+            isAnswer = false; // Set isAnswer to false to disable further taps
+            print("Why bro?");
+            try {
+              isCorrect = await correct_answer(selectedOption, index);
+            } catch(error) {
+              print(error);
+            }
+            print("Why bro?");
+            if(isCorrect == 1) correctScore++;
+            print(correctScore);
           }
-          print("why brro");
-          if(isCorrect == 1) correctScore++;
-          print(correctScore);
         });
-        // Handle user's answer
-        // handleAnswer(value);
-      },
-      
+      } : null,
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.resolveWith<Color>(
+          (Set<MaterialState> states) {
+            if (states.contains(MaterialState.pressed)) {
+              // Change color when pressed
+              return selectedColor;
+            } else {
+              // Change color based on whether the option is selected or not
+              return selectedOption == value ? selectedColor : defaultColor;
+            }
+          },
+        ),
+      ),
       child: Center(
-        child: Text(value),
+        child: Text(
+          value,
+          style: TextStyle(
+            color: selectedOption == value ? Colors.white : Colors.black, // Change text color based on whether the option is selected or not
+          ),
+        ),
       ),
     ),
   );
 }
+
 
 
 
