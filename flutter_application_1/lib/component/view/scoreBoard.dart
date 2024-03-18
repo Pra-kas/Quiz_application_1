@@ -17,9 +17,7 @@ class _ScoreState extends State<Score> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return Scaffold(
         body: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
@@ -86,7 +84,12 @@ class _ScoreState extends State<Score> {
                   child: ElevatedButton(
                     child: const Text("Next"),
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                          HomePage()),
+                          (Route<dynamic> route) => route.isFirst);
                     },
                   ),
                 ),
@@ -94,7 +97,6 @@ class _ScoreState extends State<Score> {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 }

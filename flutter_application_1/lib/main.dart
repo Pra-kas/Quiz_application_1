@@ -1,12 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/component/view/create_quiz.dart';
+import 'package:flutter_application_1/component/view/homeScreen.dart';
+import 'package:flutter_application_1/component/view/login.dart';
+import 'package:flutter_application_1/component/view/quiz.dart';
+import 'package:flutter_application_1/component/view/scoreBoard.dart';
 import 'package:flutter_application_1/component/view/sign_up.dart';
+import 'package:flutter_application_1/component/view/user_profile.dart';
+
 
 void main() {
-  runApp(const HomePage());
+  var app = MaterialApp(
+    debugShowCheckedModeBanner: true,
+    initialRoute: "profile",
+    routes: {
+      "mainhomepage" :(context) => const MainHomePage(),
+      "loginpage" :(context) => const Login(),
+      "signup" :(context) => const Signup(),
+      "homepage" :(context) => const HomeScreen(),
+      "quizcreate" :(context) => const CreateQuiz(title: ""),
+      "attendquiz" :(context) => const QuizContest(quizQuestions: []),
+      "score" :(context) => const Score(score: 0),
+      "profile" :(context) => const ProfileScreen(),
+    },
+  );
+  runApp(app);
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+
+class MainHomePage extends StatelessWidget {
+  const MainHomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

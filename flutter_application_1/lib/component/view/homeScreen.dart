@@ -17,7 +17,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool recentquizes = true;
-  static const List<String> collectionName = <String>['History', 'Maths', 'Biology', 'Programming', 'General knowledge'];
+  static const List<String> collectionName = <String>['History', 'Maths', 'Biology', 'Programming', 'General knowledge', 'wild life'];
   static String title = '';
 
   @override
@@ -25,9 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return Scaffold(
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(13.0),
@@ -119,8 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 
 // ignore: non_constant_identifier_names
@@ -200,7 +197,7 @@ class _GridState extends State<Grid> {
               category("Science"),
               category("Programming"),
               category("Sports"),
-              category("wildlife"),
+              category("wild life"),
             ],
     );
   }

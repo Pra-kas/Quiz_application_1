@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/component/view/homeScreen.dart';
 import 'package:flutter_application_1/component/view/user_profile.dart';
 
-void main() {
-  runApp(const HomePage());
-}
-
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -18,13 +14,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return Scaffold(
         body: _buildBody(),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,
@@ -48,8 +38,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 
   Widget _buildBody() {

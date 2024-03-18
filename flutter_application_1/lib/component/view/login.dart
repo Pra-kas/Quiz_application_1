@@ -24,9 +24,7 @@ class _LoginState extends State<Login> {
     double width = MediaQuery.of(context).size.width;
     Object orientation = MediaQuery.of(context).orientation;
     bool x = (orientation == 'Landscape');
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return Scaffold(
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(23.0),
@@ -91,8 +89,7 @@ class _LoginState extends State<Login> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 
   TextButton sign_up_button(BuildContext context) {

@@ -27,9 +27,7 @@ class _SignupState extends State<Signup> {
     Object orientation = MediaQuery.of(context).orientation;
     bool x = (orientation == 'Landscape');
     print(orientation);
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return Scaffold(
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Padding(
@@ -120,32 +118,58 @@ class _SignupState extends State<Signup> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 
-  TextButton sign_up_button(BuildContext context) {
-    return TextButton(
-       child: const Text(
-         "Sign up",
-         style: TextStyle(
-           color: Colors.white,
-         ),
-       ),
-       onPressed: () async {
-            if(await validateUser(email,password,conformpassword)){
-               Navigator.push(
-              // ignore: use_build_context_synchronously
-               context,
-               MaterialPageRoute(builder: (context) => const HomePage())    
-            );
-          }
-          else{
-            print("Hello");
-          }
-       },
-     );
-  }
+TextButton sign_up_button(BuildContext context) {
+  return TextButton(
+    child: const Text(
+      "Sign up",
+      style: TextStyle(
+        color: Colors.white,
+      ),
+    ),
+    onPressed: () async {
+      int validationResult = await validateUser(email, password, conformpassword);
+
+      if (validationResult == 400) {
+        _showAlert(context, "Invalid email format");
+      }else if (validationResult == 304) {
+        _showAlert(context, "Password must be at least 8 characters long");
+      } else if (validationResult == 104) {
+        _showAlert(context, "Password do not match");
+      } else if(validationResult == 404){
+        _showAlert(context, "Email id is already taken");
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const HomePage())
+        );
+      }
+    },
+  );
+}
+
+void _showAlert(BuildContext context, String message) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text("Error"),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text("OK"),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 
   Container sign_up_conform_password(bool x, double height, double width) {
     return Container(

@@ -24,9 +24,7 @@ class _QuizContestState extends State<QuizContest> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return Scaffold(
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(18.0),
@@ -70,7 +68,7 @@ class _QuizContestState extends State<QuizContest> {
                           print("Reached");
                           Navigator.push(context, MaterialPageRoute(builder: (context) => Score(score: correctScore)));
                         }
-                        index++;
+                        else index++;
                       });
                     },
                     child: const Text("Next Question"),
@@ -82,27 +80,37 @@ class _QuizContestState extends State<QuizContest> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 
-  Container questions(double height, double width, String questions) {
-    return Container(
-      height: height / 6,
-      width: width,
-      child: Card(
-        child: Center(
-          child: Text(
-            questions,
+Container questions(double height, double width, String question) {
+  return Container(
+    height: height / 6,
+    width: width,
+    child: Scrollbar(
+      child: SingleChildScrollView(
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: Text(
+                question,
+                textAlign: TextAlign.center,
+              ),
+            ),
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
+
 
 int isCorrect = 0;
 bool isAnswerSubmitted = false;
 bool isAnswer = true;
+String correctAnswer = ''; // Variable to store the correct answer
 
 Container optionContainer(double height, double width, String value) {
   Color defaultColor = const Color.fromARGB(255, 238, 236, 236); // Set the default color
@@ -155,6 +163,8 @@ Container optionContainer(double height, double width, String value) {
     ),
   );
 }
+
+
 
 
 

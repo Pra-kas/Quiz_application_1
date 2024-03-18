@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import '../data/repository/UserDetails.dart';
+
 
 Future<bool> validateUser(TextEditingController email,TextEditingController password) async{
  if(email.text.trim().isNotEmpty && password.text.trim().isNotEmpty){
@@ -19,6 +21,8 @@ Future<bool> validateUser(TextEditingController email,TextEditingController pass
     print(decodeResponse["status"]);
 
     if(decodeResponse['status']){
+      User.name = decodeResponse['user'];
+      User.session = decodeResponse['session'];
        return true;
     }
     else{

@@ -71,9 +71,7 @@ class _CreateQuizState extends State<CreateQuiz> {
   //   );
   // }
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return Scaffold(
         body: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.all(height / 20),
@@ -163,8 +161,7 @@ class _CreateQuizState extends State<CreateQuiz> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 
   ElevatedButton save_button(BuildContext context, TextEditingController A, TextEditingController B, TextEditingController C, TextEditingController D, TextEditingController answer, TextEditingController question) {
@@ -302,24 +299,28 @@ class _CreateQuizState extends State<CreateQuiz> {
   }
 
   // ignore: non_constant_identifier_names
-  Container Question(TextEditingController answer) {
-    return Container(
-    child: Card(
-      color: Colors.white.withAlpha(77),
-      child: Padding(
-        padding: const EdgeInsets.all(28.0),
-        child: TextField(
-          controller: answer,
-          textAlign: TextAlign.center,
-          decoration: const InputDecoration(
-            hintText: "Correct Option",
-            border: InputBorder.none
+Container Question(TextEditingController answer) {
+  return Container(
+    child: SingleChildScrollView(
+      child: Card(
+        color: Colors.white.withAlpha(77),
+        child: Padding(
+          padding: const EdgeInsets.all(28.0),
+          child: TextField(
+            controller: answer,
+            textAlign: TextAlign.center,
+            decoration: const InputDecoration(
+              hintText: "Correct Option",
+              border: InputBorder.none
+            ),
+            maxLines: null, // Allow unlimited number of lines
           ),
         ),
       ),
     ),
   );
 }
+
 
   // ignore: non_constant_identifier_names
   Container OptionD(TextEditingController D) {
