@@ -143,7 +143,7 @@ TextButton sign_up_button(BuildContext context) {
       } else {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const HomePage())
+          MaterialPageRoute(builder: (context) => const Login())
         );
       }
     },

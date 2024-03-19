@@ -1,5 +1,4 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:flutter_application_1/data/repository/UserDetails.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -8,7 +7,8 @@ void main() {
 }
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  final dynamic profiledetails; // List of questions
+  const ProfileScreen({Key? key, this.profiledetails}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -30,25 +30,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-Future<String> fetchUsername() async {
-  try {
-    var email = 'pk@gmail.com';
-    var url = Uri.parse('http://localhost:3000/getProfileDetails');
+// Future<String> fetchUsername() async {
+//   try {
+//     var email = 'pk@gmail.com';
+//     var url = Uri.parse('http://localhost:3000/getProfileDetails');
     
-    var response = await http.post(url, headers: {"Content-Type": "plain/text"}, body: jsonEncode(email));
+//     var response = await http.post(url, headers: {"Content-Type": "plain/text"}, body: jsonEncode(email));
 
-    if (response.statusCode == 200) {
-      var jsonResponse = jsonDecode(response.body);
-      var username = jsonResponse['message']; // Assuming 'message' contains the username
-      return username;
-    } else {
-      print('Failed to fetch username: ${response.statusCode}');
-    }
-  } catch (error) {
-    print('Error fetching username: $error');
-  }
-  return "";
-}
+//     if (response.statusCode == 200) {
+//       var jsonResponse = jsonDecode(response.body);
+//       var username = jsonResponse['message']; // Assuming 'message' contains the username
+//       return username;
+//     } else {
+//       print('Failed to fetch username: ${response.statusCode}');
+//     }
+//   } catch (error) {
+//     print('Error fetching username: $error');
+//   }
+//   return "";
+// }
 
 
   Container profileContent(String content, String value) {
@@ -66,26 +66,26 @@ Future<String> fetchUsername() async {
           Text(content),
           Padding(
             padding: const EdgeInsets.only(top: 40),
-            child: Text(value),
+            child: Text(value as String),
           ),
         ],
       ),
     );
   }
 
-  @override
-@override
-void initState() {
-  super.initState();
-  fetchUsername().then((value) {
-    setState(() {
-      username = value;
-      print(username);
-    });
-  }).catchError((error) {
-    print('Error initializing username: $error');
-  });
-}
+//   @override
+// @override
+// void initState() {
+//   super.initState();
+//   fetchUsername().then((value) {
+//     setState(() {
+//       username = value;
+//       print(username);
+//     });
+//   }).catchError((error) {
+//     print('Error initializing username: $error');
+//   });
+// }
 
 
   @override
@@ -153,8 +153,8 @@ void initState() {
               Padding(
                 padding: EdgeInsets.only(top: height / 50),
                 child: Text(
-                  username, // Display the fetched username here
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  User.name, // Display the fetched username here
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
               Padding(
@@ -179,12 +179,10 @@ void initState() {
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
-                      profileContent("Worldrank", "0"),
-                      profileContent("Gamesplayed", "0"),
-                      profileContent("Total points", "0"),
-                      profileContent("Completion rate", "0"),
-                      profileContent("Correct answers", "0"),
-                      profileContent("Wrong answers", "0"),
+                      profileContent("Gamesplayed", User.totalquiz),
+                      profileContent("Total points", User.totalpoint),
+                      profileContent("Correct answers", User.totalcorrect),
+                      profileContent("Wrong answers", User.totalwrong),
                     ],
                   ),
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/component/view/Leaderboard.dart';
 import 'package:flutter_application_1/component/view/create_quiz.dart';
 import 'package:flutter_application_1/component/view/homeScreen.dart';
 import 'package:flutter_application_1/component/view/login.dart';
@@ -11,7 +12,7 @@ import 'package:flutter_application_1/component/view/user_profile.dart';
 void main() {
   var app = MaterialApp(
     debugShowCheckedModeBanner: true,
-    initialRoute: "profile",
+    initialRoute: "mainhomepage",
     routes: {
       "mainhomepage" :(context) => const MainHomePage(),
       "loginpage" :(context) => const Login(),
@@ -21,6 +22,7 @@ void main() {
       "attendquiz" :(context) => const QuizContest(quizQuestions: []),
       "score" :(context) => const Score(score: 0),
       "profile" :(context) => const ProfileScreen(),
+      "leaderboard" :(context) => const Leaderboard()
     },
   );
   runApp(app);
@@ -106,3 +108,8 @@ class MainHomePage extends StatelessWidget {
     );
   }
 }
+
+  //  Future<String?> getSessionToken() async {
+  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   return prefs.getString("session");
+  // }
