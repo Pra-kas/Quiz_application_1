@@ -1,6 +1,7 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/component/view/homepage.dart';
+import 'package:flutter_application_1/service/CorrectAnswer.dart';
 
 class Score extends StatefulWidget {
   final dynamic score;
@@ -83,13 +84,19 @@ class _ScoreState extends State<Score> {
                   ),
                   child: ElevatedButton(
                     child: const Text("Next"),
-                    onPressed: () {
+                    onPressed: () async{
+                      dynamic ans = await setCorrectAnswer(widget.score);
+                      if(ans['status']){
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
                           builder: (BuildContext context) =>
-                          HomePage()),
+                          const HomePage()),
                           (Route<dynamic> route) => route.isFirst);
+                      }
+                      else{
+                        print("error in api");
+                      }
                     },
                   ),
                 ),

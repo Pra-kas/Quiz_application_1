@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_unnecessary_containers
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/component/view/create_quiz.dart';
+import 'package:flutter_application_1/component/view/login.dart';
 import 'package:flutter_application_1/component/view/quiz.dart';
 import 'package:flutter_application_1/service/quiz_topics_api_call.dart';
 
@@ -217,6 +218,10 @@ class _GridState extends State<Grid> {
           // ignore: use_build_context_synchronously
           Navigator.push(context, MaterialPageRoute(builder: ((context) => QuizContest(quizQuestions: question,))));
         }
+        else if(question['message'] == 143){
+          _showAlert(context, "Session expired please login again");
+          Navigator.push(context, MaterialPageRoute(builder: ((context) => const Login())));
+        }
       },
       child: Container(
         padding: const EdgeInsets.all(10),
@@ -224,6 +229,26 @@ class _GridState extends State<Grid> {
       ),
     );
   }
+}
+
+void _showAlert(BuildContext context, String message) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text("Error"),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text("OK"),
+          ),
+        ],
+      );
+    },
+  );
 }
 
 // Widget recentQuizes(bool recentquizes) {

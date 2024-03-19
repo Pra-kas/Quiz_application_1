@@ -1,5 +1,6 @@
 import 'dart:core';
 import 'package:flutter_application_1/component/view/homeScreen.dart';
+import 'package:flutter_application_1/component/view/login.dart';
 import 'package:flutter_application_1/service/quizCreationApiCall.dart';
 import 'package:flutter/material.dart';
 
@@ -234,12 +235,14 @@ class _CreateQuizState extends State<CreateQuiz> {
   TextButton okey_button(BuildContext context,TextEditingController question,TextEditingController A,TextEditingController B,TextEditingController C, TextEditingController D, TextEditingController answer) {
     return TextButton(
            onPressed: () async{
-            if(await quiz_validation(widget.title,question,A,B,C,D,answer,obj)){
+            dynamic result = await quiz_validation(widget.title,question,A,B,C,D,answer,obj);
+            if(result['status']){
               // ignore: use_build_context_synchronously
               Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
               print(widget.title);
             }
-            else{
+            else if(result['message'] == 143){
+              Navigator.push(context,MaterialPageRoute(builder: (context) => const Login()));
               print("Prakash");
             }
            },

@@ -65,10 +65,13 @@ class _QuizContestState extends State<QuizContest> {
                         isAnswer = true;
                         isAnswerSubmitted = false;
                         if(index == 4){
+                          index = 0;
                           print("Reached");
                           Navigator.push(context, MaterialPageRoute(builder: (context) => Score(score: correctScore)));
                         }
-                        else index++;
+                        else {
+                          index++;
+                        }
                       });
                     },
                     child: const Text("Next Question"),
@@ -128,11 +131,7 @@ Container optionContainer(double height, double width, String value) {
             isAnswerSubmitted = true; // Mark the answer as submitted
             isAnswer = false; // Set isAnswer to false to disable further taps
             print("Why bro?");
-            try {
-              isCorrect = await correct_answer(selectedOption, index);
-            } catch(error) {
-              print(error);
-            }
+            isCorrect = await correct_answer(selectedOption, index);
             print("Why bro?");
             if(isCorrect == 1) correctScore++;
             print(correctScore);

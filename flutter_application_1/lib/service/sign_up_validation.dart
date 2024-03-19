@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/data/repository/UserDetails.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -30,7 +31,7 @@ Future<int> validateUser(TextEditingController email, TextEditingController pass
   };
 
   var response = await http.post(
-    Uri.parse("http://localhost:3000/signup"),
+    Uri.parse("${User.Ip}/signup"),
     headers: {"Content-Type": "application/json"},
     body: jsonEncode(requestBody),
   );

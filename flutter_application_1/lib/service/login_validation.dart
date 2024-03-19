@@ -11,7 +11,7 @@ Future<bool> validateUser(TextEditingController email,TextEditingController pass
       "password":password.text.trim(),
     };
 
-    var response = await http.post(Uri.parse("http://localhost:3000/login"),
+    var response = await http.post(Uri.parse("${User.Ip}/login"),
     headers:{"Content-Type":"application/json"},
     body:jsonEncode(requestBody)
     );
@@ -22,7 +22,8 @@ Future<bool> validateUser(TextEditingController email,TextEditingController pass
 
     if(decodeResponse['status']){
       User.name = decodeResponse['user'];
-      User.session = decodeResponse['session'];
+      User.session = decodeResponse['message'];
+      print(User.name + " " + User.session);
        return true;
     }
     else{

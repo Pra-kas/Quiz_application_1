@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/component/view/Leaderboard.dart';
 import 'package:flutter_application_1/component/view/homeScreen.dart';
 import 'package:flutter_application_1/component/view/user_profile.dart';
+import 'package:flutter_application_1/data/repository/UserDetails.dart';
+import 'package:flutter_application_1/service/GetProfile.dart';
+import 'package:flutter_application_1/service/getLeaderboard.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,10 +22,26 @@ class _HomePageState extends State<HomePage> {
         body: _buildBody(),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
+          onTap: (index) async {
+            if (index == 2) {
+              bool res = await fetchProfile(User.name);
+              if (res) {
+                setState(() {
+                  _currentIndex = index;
+                });
+              }
+            } 
+            if(index == 1){
+              await getLeaderProfile();
+              setState(() {
+                _currentIndex = index;
+              });
+            }
+            else {
+              setState(() {
+                _currentIndex = index;
+              });
+            }
           },
           items: const [
             BottomNavigationBarItem(
@@ -41,27 +61,16 @@ class _HomePageState extends State<HomePage> {
       );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(){
     switch (_currentIndex) {
       case 0:
         return const HomeScreen();
       case 1:
-        return LeaderboardScreen();
+        return const Leaderboard();
       case 2:
         return const ProfileScreen();
       default:
-        return Container(); // Handle the default case or return an empty container
+        return Container();
     }
-  }
-}
-
-
-class LeaderboardScreen extends StatelessWidget {
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Leaderboard Screen'),
-    );
   }
 }
